@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: final
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app
+        image: 638125615216.dkr.ecr.us-east-1.amazonaws.com/final:app
+        ports:
+        - containerPort: 81
+        env:
+        - name: GROUP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: GROUP_NAME
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: PORT
+        - name: APP_COLOR
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: APP_COLOR
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: BUCKET_NAME
+        - name: IMAGE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: IMAGE_KEY
+        - name: DBPORT
+          valueFrom:
+            configMapKeyRef:
+              name: final-config
+              key: DBPORT
+        - name: DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: final-secret
+              key: DATABASE
+        - name: DBUSER
+          valueFrom:
+            secretKeyRef:
+              name: final-secret
+              key: DBUSER
+        - name: DBHOST
+          valueFrom:
+            secretKeyRef:
+              name: final-secret
+              key: DBHOST
+        - name: DBPWD
+          valueFrom:
+            secretKeyRef:
+              name: final-secret
+              key: DBPWD
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: final
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 81
+      targetPort: 81

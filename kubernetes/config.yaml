@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: final-config
+  namespace: final
+data:
+  GROUP_NAME: Shrey
+  PORT: "81"
+  APP_COLOR: lime
+  BUCKET_NAME: finalprojectshrey
+  IMAGE_KEY: bg3.jpg
+  DBPORT: "3306"

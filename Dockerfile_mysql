@@ -1,0 +1,8 @@
+FROM mysql:8.0
+
+COPY ./mysql.sql /tmp/
+
+COPY ./my.cnf /etc/mysql/conf.d/my.cnf
+RUN chmod 600 /etc/mysql/conf.d/my.cnf
+
+CMD [ "mysqld", "--init-file=/tmp/mysql.sql" ]
